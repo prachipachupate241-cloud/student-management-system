@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Monthly Attendance Report</title>
+
+    <!-- Bootstrap -->
+
+    <link href=
+                  "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <!-- TITLE -->
+
+    <h1 class="text-center text-primary mb-5">
+
+        Monthly Attendance Report
+
+    </h1>
+
+    <!-- BACK BUTTON -->
+
+    <div class="d-flex justify-content-end mb-3">
+
+        <a href="/students"
+           class="btn btn-dark">
+
+            Back
+
+        </a>
+
+    </div>
+
+    <!-- REPORT TABLE -->
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-hover text-center align-middle">
+
+                <!-- HEADER -->
+
+                <thead class="table-dark">
+
+                <tr>
+
+                    <th>Student No</th>
+
+                    <th>Name</th>
+
+                    <th>Course</th>
+
+                    <th>Present</th>
+
+                    <th>Absent</th>
+
+                    <th>Attendance %</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+                </thead>
+
+                <!-- BODY -->
+
+                <tbody>
+
+                <tr th:each="s : ${students}">
+
+                    <!-- STUDENT NO -->
+
+                    <td th:text="${s.studentNo}"></td>
+
+                    <!-- NAME -->
+
+                    <td th:text="${s.name}"></td>
+
+                    <!-- COURSE -->
+
+                    <td>
+
+                        <span class="badge bg-info"
+                              th:text="${s.course}">
+
+                        </span>
+
+                    </td>
+
+                    <!-- PRESENT -->
+
+                    <td>
+
+                        <span class="badge bg-success"
+
+                              th:text="${presentMap[s.id]}">
+
+                        </span>
+
+                    </td>
+
+                    <!-- ABSENT -->
+
+                    <td>
+
+                        <span class="badge bg-danger"
+
+                              th:text="${absentMap[s.id]}">
+
+                        </span>
+
+                    </td>
+
+                    <!-- PERCENTAGE -->
+
+                    <td>
+
+                        <span class="badge bg-primary"
+
+                              th:text=
+                                      "${#numbers.formatDecimal(
+                              percentageMap[s.id],
+                              1,
+                              2)} + '%'">
+
+                        </span>
+
+                    </td>
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        <!-- ✅ ABOVE 75 -->
+
+                        <span class="badge bg-success"
+
+                              th:if=
+                                      "${percentageMap[s.id] >= 75}">
+
+                            Eligible
+
+                        </span>
+
+                        <!-- ❌ BELOW 75 -->
+
+                        <span class="badge bg-danger"
+
+                              th:if=
+                                      "${percentageMap[s.id] < 75}">
+
+                            Low Attendance
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
