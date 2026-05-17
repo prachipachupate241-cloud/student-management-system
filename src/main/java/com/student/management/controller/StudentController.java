@@ -5,11 +5,8 @@ import com.student.management.service.StudentService;
 import com.student.management.service.AttendanceService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,8 +22,7 @@ public class StudentController {
     @Autowired
     private AttendanceService attendanceService;
 
-    // 📋 STUDENT LIST
-
+    // 📋 STUDENT LIST + SEARCH + ATTENDANCE %
     @GetMapping("/students")
     public String list(
 
@@ -43,30 +39,25 @@ public class StudentController {
         List<student> students;
 
         // 🔍 SEARCH
-
         if (keyword != null &&
                 !keyword.isEmpty()) {
 
             students =
                     service.searchStudents(keyword);
 
-        }
-
-        else {
+        } else {
 
             students =
                     service.getAllStudents();
         }
 
-        // 📋 STUDENT DATA
-
+        // 📋 STUDENTS
         model.addAttribute(
                 "students",
                 students
         );
 
         // 📊 DASHBOARD
-
         model.addAttribute(
                 "totalStudents",
                 service.totalStudents()
@@ -87,13 +78,13 @@ public class StudentController {
                 service.totalBCOMStudents()
         );
 
+        // 🔍 SEARCH VALUE
         model.addAttribute(
                 "keyword",
                 keyword
         );
 
         // 📈 ATTENDANCE %
-
         Map<Long, Double> attendanceMap =
                 new HashMap<>();
 
@@ -119,8 +110,7 @@ public class StudentController {
         return "student-list";
     }
 
-    // ➕ ADD STUDENT PAGE
-
+    // ➕ ADD STUDENT FORM
     @GetMapping("/add")
     public String addForm(Model model) {
 
@@ -133,7 +123,6 @@ public class StudentController {
     }
 
     // 💾 SAVE STUDENT
-
     @PostMapping("/save")
     public String save(
             @ModelAttribute student student
@@ -144,8 +133,7 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    // ✏️ EDIT STUDENT
-
+    // ✏ EDIT STUDENT
     @GetMapping("/edit/{id}")
     public String edit(
 
@@ -163,7 +151,6 @@ public class StudentController {
     }
 
     // ❌ DELETE STUDENT
-
     @GetMapping("/delete/{id}")
     public String delete(
             @PathVariable Long id
