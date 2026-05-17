@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,23 +15,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // ✅ SECURITY
-
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http
-    ) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
 
-                // ✅ CSRF OFF
-
                 .csrf(csrf -> csrf.disable())
-
-                // ✅ URL ACCESS
 
                 .authorizeHttpRequests(auth -> auth
 
+                        // PUBLIC
                         .requestMatchers(
                                 "/",
                                 "/login",
@@ -40,22 +32,33 @@ public class SecurityConfig {
                                 "/js/**"
                         ).permitAll()
 
+                        // ADMIN ONLY
+                        .requestMatchers(
+                                "/students/add",
+                                "/students/edit/**",
+                                "/students/delete/**",
+                                "/attendance/add",
+                                "/results/add"
+                        ).hasRole("ADMIN")
+
+                        // STUDENT + ADMIN
+                        .requestMatchers(
+                                "/students",
+                                "/attendance",
+                                "/results"
+                        ).hasAnyRole("ADMIN", "STUDENT")
+
                         .anyRequest().authenticated()
                 )
 
-                // ✅ LOGIN
-
                 .formLogin(form -> form
 
-                        .defaultSuccessUrl(
-                                "/students",
-                                true
-                        )
+                        .loginPage("/login")
+
+                        .defaultSuccessUrl("/students", true)
 
                         .permitAll()
                 )
-
-                // ✅ LOGOUT
 
                 .logout(logout -> logout
 
@@ -67,23 +70,25 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ USERNAME PASSWORD
-
     @Bean
     public UserDetailsService userDetailsService() {
 
+        // ADMIN
         UserDetails admin = User
-
                 .withDefaultPasswordEncoder()
-
                 .username("admin")
-
                 .password("admin123")
-
                 .roles("ADMIN")
-
                 .build();
 
-        return new InMemoryUserDetailsManager(admin);
+        // STUDENT
+        UserDetails student = User
+                .withDefaultPasswordEncoder()
+                .username("student")
+                .password("student123")
+                .roles("STUDENT")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, student);
     }
 }
