@@ -1,39 +1,60 @@
+
 package com.student.management.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
-import org.springframework.security.core.userdetails.*;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import org.springframework.security.web.SecurityFilterChain;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Configuration
 public class SecurityConfig {
 
+    // 🔐 PASSWORD ENCODER
+
     @Bean
-    public UserDetailsService userDetailsService() {
+    public PasswordEncoder passwordEncoder() {
 
-        UserDetails admin =
-                User.builder()
-                        .username("admin")
-                        .password(passwordEncoder().encode("admin123"))
-                        .roles("ADMIN")
-                        .build();
+        return new BCryptPasswordEncoder();
+    }
 
-        UserDetails user =
-                User.builder()
-                        .username("user")
-                        .password(passwordEncoder().encode("user123"))
-                        .roles("USER")
-                        .build();
+    // 👤 USERS
+
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService(
+            PasswordEncoder encoder
+    ) {
+
+        UserDetails admin = User.builder()
+
+                .username("admin")
+
+                .password(
+                        encoder.encode("admin123")
+                )
+
+                .roles("ADMIN")
+
+                .build();
+
+        UserDetails user = User.builder()
+
+                .username("user")
+
+                .password(
+                        encoder.encode("user123")
+                )
+
+                .roles("USER")
+
+                .build();
 
         return new InMemoryUserDetailsManager(
                 admin,
@@ -41,11 +62,7 @@ public class SecurityConfig {
         );
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-
-        return new BCryptPasswordEncoder();
-    }
+    // 🔒 SECURITY
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -83,8 +100,11 @@ public class SecurityConfig {
                 .logout(logout -> logout
 
                         .logoutSuccessUrl("/login")
+
+                        .permitAll()
                 );
 
         return http.build();
     }
 }
+
