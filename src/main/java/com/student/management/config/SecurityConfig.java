@@ -5,14 +5,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
-import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
@@ -71,9 +73,15 @@ public class SecurityConfig {
 
         http
 
+                // ✅ CSRF
+
                 .csrf(csrf -> csrf.disable())
 
+                // ✅ AUTHORIZATION
+
                 .authorizeHttpRequests(auth -> auth
+
+                        // PUBLIC PAGES
 
                         .requestMatchers(
                                 "/",
@@ -82,8 +90,29 @@ public class SecurityConfig {
                                 "/js/**"
                         ).permitAll()
 
+                        // ADMIN ONLY
+
+                        .requestMatchers(
+
+                                "/students/add",
+                                "/students/save",
+
+                                "/students/edit/**",
+                                "/students/delete/**",
+
+                                "/attendance/save",
+
+                                "/results/add/**",
+                                "/results/save"
+
+                        ).hasRole("ADMIN")
+
+                        // ALL LOGGED USERS
+
                         .anyRequest().authenticated()
                 )
+
+                // ✅ LOGIN
 
                 .formLogin(form -> form
 
@@ -97,6 +126,8 @@ public class SecurityConfig {
                         .permitAll()
                 )
 
+                // ✅ LOGOUT
+
                 .logout(logout -> logout
 
                         .logoutSuccessUrl("/login")
@@ -107,4 +138,5 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
 

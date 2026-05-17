@@ -1,5 +1,7 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -172,19 +174,34 @@
 
     <div class="mb-4 text-end">
 
-        <a href="/add"
-           class="btn btn-success">
+        <!-- ADMIN ONLY -->
 
-            + Add Student
+        <span sec:authorize="hasRole('ADMIN')">
 
-        </a>
+            <a href="/add"
+               class="btn btn-success">
 
-        <a href="/attendance"
-           class="btn btn-dark">
+                + Add Student
 
-            Mark Attendance
+            </a>
 
-        </a>
+            <a href="/attendance"
+               class="btn btn-dark">
+
+                Mark Attendance
+
+            </a>
+
+            <a href="/results-system"
+               class="btn btn-primary">
+
+                Result System
+
+            </a>
+
+        </span>
+
+        <!-- ALL USERS -->
 
         <a href="/attendance-history"
            class="btn btn-primary">
@@ -197,13 +214,6 @@
            class="btn btn-warning">
 
             Monthly Report
-
-        </a>
-
-        <a href="/results-system"
-           class="btn btn-primary">
-
-            Result System
 
         </a>
 
@@ -245,6 +255,8 @@
 
                 <td th:text="${s.studentNo}"></td>
 
+                <!-- NAME -->
+
                 <td>
 
                     <a th:href="@{/student-attendance/{id}(id=${s.id})}"
@@ -255,8 +267,8 @@
 
                     </a>
 
-
                 </td>
+
                 <!-- EMAIL -->
 
                 <td th:text="${s.email}"></td>
@@ -291,19 +303,37 @@
 
                 <td>
 
-                    <a th:href="@{/edit/{id}(id=${s.id})}"
-                       class="btn btn-warning btn-sm">
+                    <!-- ADMIN -->
 
-                        Edit
+                    <div sec:authorize="hasRole('ADMIN')">
 
-                    </a>
+                        <a th:href="@{/edit/{id}(id=${s.id})}"
+                           class="btn btn-warning btn-sm">
 
-                    <a th:href="@{/delete/{id}(id=${s.id})}"
-                       class="btn btn-danger btn-sm">
+                            Edit
 
-                        Delete
+                        </a>
 
-                    </a>
+                        <a th:href="@{/delete/{id}(id=${s.id})}"
+                           class="btn btn-danger btn-sm">
+
+                            Delete
+
+                        </a>
+
+                    </div>
+
+                    <!-- USER -->
+
+                    <div sec:authorize="hasRole('USER')">
+
+                        <span class="text-success fw-bold">
+
+                            View Only
+
+                        </span>
+
+                    </div>
 
                 </td>
 
