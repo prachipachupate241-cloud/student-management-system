@@ -19,21 +19,28 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    // PASSWORD ENCODER
+
     @Bean
     public PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
 
+    // SECURITY
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
 
+                // CSRF OFF
                 .csrf(csrf -> csrf.disable())
 
+                // URL SECURITY
                 .authorizeHttpRequests(auth -> auth
 
+                        // PUBLIC
                         .requestMatchers(
                                 "/",
                                 "/login",
@@ -49,12 +56,25 @@ public class SecurityConfig {
                                 "/save/**"
                         ).hasRole("ADMIN")
 
-                        // ALL USERS
+                        // ADMIN + STUDENT
                         .anyRequest().hasAnyRole("ADMIN", "STUDENT")
                 )
 
-                .formLogin(form -> form.permitAll())
+                // LOGIN
+                .formLogin(form -> form
 
+                        .loginPage("/login")
+
+                        .usernameParameter("username")
+
+                        .passwordParameter("password")
+
+                        .defaultSuccessUrl("/students", true)
+
+                        .permitAll()
+                )
+
+                // LOGOUT
                 .logout(logout -> logout
 
                         .logoutSuccessUrl("/login")
@@ -65,10 +85,13 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // USERS
+
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
 
         // ADMIN
+
         UserDetails admin = User.builder()
 
                 .username("admin")
@@ -80,6 +103,7 @@ public class SecurityConfig {
                 .build();
 
         // STUDENT
+
         UserDetails student = User.builder()
 
                 .username("student")
