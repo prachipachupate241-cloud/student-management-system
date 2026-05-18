@@ -34,9 +34,10 @@
 
     </div>
 
-    <!-- BUTTON -->
+    <!-- USER ONLY VIEW BUTTON -->
 
-    <div class="mb-4 text-end">
+    <div class="mb-4 text-end"
+         th:if="${#authorization.expression('hasRole(''USER'')')}">
 
         <a href="/results"
            class="btn btn-primary">
@@ -67,7 +68,10 @@
 
                     <th>Year</th>
 
-                    <th>Add Result</th>
+                    <!-- ADMIN ONLY COLUMN -->
+                    <th th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        Add Result
+                    </th>
 
                 </tr>
 
@@ -85,7 +89,8 @@
 
                     <td th:text="${s.year}"></td>
 
-                    <td>
+                    <!-- ADMIN ONLY BUTTON -->
+                    <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
                         <a th:href=
                                    "@{/add-result/{id}(id=${s.id})}"
