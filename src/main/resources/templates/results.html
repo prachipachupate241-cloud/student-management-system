@@ -55,7 +55,13 @@
 
                     <th>Result</th>
 
-                    <th>Action</th>
+                    <!-- ADMIN ONLY -->
+
+                    <th th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+
+                        Action
+
+                    </th>
 
                 </tr>
 
@@ -117,9 +123,9 @@
 
                     </td>
 
-                    <!-- DELETE -->
+                    <!-- ADMIN ONLY DELETE -->
 
-                    <td>
+                    <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
                         <a th:href=
                                    "@{/deleteResult/{id}(id=${r.id})}"
