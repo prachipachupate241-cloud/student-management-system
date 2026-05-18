@@ -122,16 +122,28 @@ public class StudentController {
         return "add-student";
     }
 
-    // 💾 SAVE STUDENT
+
+// 💾 SAVE STUDENT
+
     @PostMapping("/save")
     public String save(
             @ModelAttribute student student
     ) {
 
+        // ✅ AUTO STUDENT NUMBER
+
+        String studentNo =
+                service.generateStudentNo(
+                        student.getCourse()
+                );
+
+        student.setStudentNo(studentNo);
+
         service.saveStudent(student);
 
         return "redirect:/students";
     }
+
 
     // ✏ EDIT STUDENT
     @GetMapping("/edit/{id}")

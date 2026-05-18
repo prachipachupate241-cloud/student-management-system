@@ -106,4 +106,24 @@ public class StudentService {
                         year
                 );
     }
+
+    // ✅ AUTO GENERATE STUDENT NUMBER
+
+    public String generateStudentNo(String course) {
+
+        long count = repository.findAll()
+
+                .stream()
+
+                .filter(s ->
+                        s.getCourse()
+                                .equalsIgnoreCase(course)
+                )
+
+                .count();
+
+        return course.toUpperCase() + "-" + (count + 1);
+    }
+
 }
+
