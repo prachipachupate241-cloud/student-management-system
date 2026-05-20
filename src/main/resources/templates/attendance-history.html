@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -60,7 +61,13 @@
 
                     <th>Status</th>
 
-                    <th>Delete</th>
+                    <!-- ADMIN ONLY -->
+
+                    <th sec:authorize="hasRole('ADMIN')">
+
+                        Delete
+
+                    </th>
 
                 </tr>
 
@@ -110,9 +117,9 @@
 
                     </td>
 
-                    <!-- DELETE -->
+                    <!-- DELETE BUTTON ADMIN ONLY -->
 
-                    <td>
+                    <td sec:authorize="hasRole('ADMIN')">
 
                         <a th:href=
                                    "@{/deleteAttendance/{id}(id=${a.id})}"
