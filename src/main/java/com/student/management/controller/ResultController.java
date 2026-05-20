@@ -8,6 +8,8 @@ import com.student.management.service.StudentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -38,8 +40,9 @@ public class ResultController {
         return "results";
     }
 
-    // ✅ ADD RESULT PAGE
+    // ✅ ADD RESULT PAGE (ADMIN ONLY)
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add-result/{id}")
     public String addResultPage(
 
@@ -70,8 +73,9 @@ public class ResultController {
         return "add-result";
     }
 
-    // ✅ SAVE RESULT
+    // ✅ SAVE RESULT (ADMIN ONLY)
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/saveResult")
     public String saveResult(
 
@@ -85,8 +89,9 @@ public class ResultController {
         return "redirect:/results";
     }
 
-    // ✅ DELETE RESULT
+    // ✅ DELETE RESULT (ADMIN ONLY)
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/deleteResult/{id}")
     public String deleteResult(
 

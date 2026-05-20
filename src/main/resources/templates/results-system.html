@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -37,7 +38,7 @@
     <!-- USER ONLY VIEW BUTTON -->
 
     <div class="mb-4 text-end"
-         th:if="${#authorization.expression('hasRole(''USER'')')}">
+         sec:authorize="hasRole('USER')">
 
         <a href="/results"
            class="btn btn-primary">
@@ -69,8 +70,11 @@
                     <th>Year</th>
 
                     <!-- ADMIN ONLY COLUMN -->
-                    <th th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+
+                    <th sec:authorize="hasRole('ADMIN')">
+
                         Add Result
+
                     </th>
 
                 </tr>
@@ -90,7 +94,8 @@
                     <td th:text="${s.year}"></td>
 
                     <!-- ADMIN ONLY BUTTON -->
-                    <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+
+                    <td sec:authorize="hasRole('ADMIN')">
 
                         <a th:href=
                                    "@{/add-result/{id}(id=${s.id})}"

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -57,7 +58,7 @@
 
                     <!-- ADMIN ONLY -->
 
-                    <th th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <th sec:authorize="hasRole('ADMIN')">
 
                         Action
 
@@ -106,7 +107,6 @@
                     <td>
 
                         <span class="badge bg-success"
-
                               th:if="${r.result == 'Pass'}">
 
                             Pass
@@ -114,7 +114,6 @@
                         </span>
 
                         <span class="badge bg-danger"
-
                               th:if="${r.result == 'Fail'}">
 
                             Fail
@@ -125,7 +124,7 @@
 
                     <!-- ADMIN ONLY DELETE -->
 
-                    <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <td sec:authorize="hasRole('ADMIN')">
 
                         <a th:href=
                                    "@{/deleteResult/{id}(id=${r.id})}"

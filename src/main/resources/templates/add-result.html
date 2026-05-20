@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -13,7 +14,10 @@
 
 <body class="bg-light">
 
-<div class="container mt-5">
+<!-- ADMIN ONLY PAGE -->
+
+<div class="container mt-5"
+     sec:authorize="hasRole('ADMIN')">
 
     <div class="card shadow p-4">
 

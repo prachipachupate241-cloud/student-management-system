@@ -61,6 +61,15 @@ public class Result {
     }
 
     public void setJavaMarks(int javaMarks) {
+
+        if(javaMarks < 0) {
+            javaMarks = 0;
+        }
+
+        if(javaMarks > 100) {
+            javaMarks = 100;
+        }
+
         this.javaMarks = javaMarks;
     }
 
@@ -69,6 +78,15 @@ public class Result {
     }
 
     public void setPythonMarks(int pythonMarks) {
+
+        if(pythonMarks < 0) {
+            pythonMarks = 0;
+        }
+
+        if(pythonMarks > 100) {
+            pythonMarks = 100;
+        }
+
         this.pythonMarks = pythonMarks;
     }
 
@@ -77,6 +95,15 @@ public class Result {
     }
 
     public void setDbmsMarks(int dbmsMarks) {
+
+        if(dbmsMarks < 0) {
+            dbmsMarks = 0;
+        }
+
+        if(dbmsMarks > 100) {
+            dbmsMarks = 100;
+        }
+
         this.dbmsMarks = dbmsMarks;
     }
 
@@ -85,6 +112,15 @@ public class Result {
     }
 
     public void setCloudMarks(int cloudMarks) {
+
+        if(cloudMarks < 0) {
+            cloudMarks = 0;
+        }
+
+        if(cloudMarks > 100) {
+            cloudMarks = 100;
+        }
+
         this.cloudMarks = cloudMarks;
     }
 
